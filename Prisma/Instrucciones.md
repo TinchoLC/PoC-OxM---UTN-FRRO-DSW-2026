@@ -1,9 +1,9 @@
-INSTRUCCIONES PARA CORRER LA DEMO (Prisma + MySQL)
+# INSTRUCCIONES PARA CORRER LA DEMO (Prisma + MySQL)
 ====================================================
  
 Esta demo usa Prisma con MySQL.
  
-REQUISITOS PREVIOS
+## REQUISITOS PREVIOS
 ------------------
 - Node.js 20 o superior (ejecutar node -v)
 - npm (viene con Node.js)
@@ -14,58 +14,72 @@ IMPORTANTE: el schema.prisma debe quedar dentro de la carpeta "prisma/",porque e
 (es decir, se generará en mi-proyecto/src/generated/prisma).
  
  
-2) INICIALIZAR EL PROYECTO (solo si no hay package.json)
+## 2) INICIALIZAR EL PROYECTO (solo si no hay package.json)
+```bash
 npm init -y
 npm pkg set type=module
+```
  
  
-3) INSTALAR DEPENDENCIAS
+## 3) INSTALAR DEPENDENCIAS
+```bash
 npm install @prisma/client@6 dotenv
 npm install -D prisma@6 typescript tsx @types/node
+```
  
 Nota: la demo está hecha con Prisma 6.x (por eso la conexión se define con "url = env("DATABASE_URL")" en el schema y se lee del archivo .env). 
 Es importante instalar prisma y @prisma/client con "@6" para quedarse en esa version: las versiones 7 en adelante cambian la configuración 
 (la URL pasa a un archivo prisma.config.ts y se requiere un adaptador de base de datos) y esta demo no funcionaría sin modificarla.
  
-Para verificar la versión instalada: npx prisma -v
+Para verificar la versión instalada: `npx prisma -v`
  
  
-4) CREAR LA BASE DE DATOS
+## 4) CREAR LA BASE DE DATOS
 Entra a MySQL y crea una base vacia:
+```sql
 mysql -u root -p
 CREATE DATABASE demo_prisma;
 EXIT;
+```
 
 Alternativamente, si el SERVIDOR MySQL está corriendo y  el usuario tiene permisos para crear bases, esta se creará de forma automática durante el paso 6.
 
  
-5) CONFIGURAR LA VARIABLE DATABASE_URL
+## 5) CONFIGURAR LA VARIABLE DATABASE_URL
 
 Crea un archivo llamado ".env" en la raíz del proyecto con:
  
+```env
 DATABASE_URL="mysql://root:secreto@localhost:3306/demo_prisma"
+```
  
-Formato: mysql://USUARIO:CLAVE@HOST:PUERTO/NOMBRE_BASE
+Formato: `mysql://USUARIO:CLAVE@HOST:PUERTO/NOMBRE_BASE`  
 Ajusta usuario, clave, host y puerto según tu entorno.
  
  
-6) APLICAR EL ESQUEMA Y GENERAR EL CLIENTE
+## 6) APLICAR EL ESQUEMA Y GENERAR EL CLIENTE
+```bash
 npx prisma db push
 npx prisma generate
+```
  
-"db push" crea las tablas (Usuario, Publicación, Etiqueta y la tabla intermedia de la relación muchos a muchos) en la base.
+"db push" crea las tablas (Usuario, Publicación, Etiqueta y la tabla intermedia de la relación muchos a muchos) en la base.  
 "generate" crea el cliente en src/generated/prisma.
  
 (Alternativa con historial de migraciones:)
+```bash
 npx prisma migrate dev --name init
+```
  
  
-7) EJECUTAR LA DEMO
+## 7) EJECUTAR LA DEMO
+```bash
 npx tsx demo.ts
-Para ver los datos gráficamente: npx prisma studio
+```
+Para ver los datos gráficamente: `npx prisma studio`
 
  
-SOLUCION DE PROBLEMAS
+## SOLUCION DE PROBLEMAS
 ---------------------
 - "Cannot find module './src/generated/prisma/client.js'": falta ejecutar "npx prisma generate" o el schema.prisma no está en la carpeta prisma/.
  
